@@ -19,8 +19,11 @@
 
 function getData($data, $pattern)
 {
-	$info = false;
-	$toReturn = false;
+	
+	$foundData = false;
+	$dataArray = array();	
+	$dataArrayIteration = 0;
+	
 
 	$dataLineArray = explode("\n", $data);
 
@@ -32,19 +35,26 @@ function getData($data, $pattern)
 			$patternArray = explode("/", $pattern);
 
 			$iteration = 0;
+			
 
-        foreach($lineArray as $lineData)
-        {
-            if($patternArray[$iteration] == $lineData)
-            {
-                $iteration++;
-            }
-            elseif ($iteration == count($patternArray))
-            {
-                $info = $lineData;
-                break;
-            }
-        }
+			$foundData = true;
+	
+			
+
+			foreach($lineArray as $lineData)
+			{
+				if($patternArray[$iteration] == $lineData)
+				{
+					$iteration++;
+				}
+			elseif ($iteration == count($patternArray))
+			{
+				$dataArray[$dataArrayIteration] = $lineData;
+				$dataArrayIteration++;
+			
+				break;
+			}
+			}
 
 
 		
@@ -55,7 +65,7 @@ function getData($data, $pattern)
 		}
 	}
 
-	return $info;
+	return $dataArray;
 }
 		
 	

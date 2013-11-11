@@ -42,10 +42,52 @@ Here's an example:
 
 	$data = "book/Lord Of The Flies/author/William Golding";
 
-	echo "Book Title: " . getData($data, "book") . " Book Author: " . getData($data, "book/Lord Of The Flies/author");
+	echo "Book Title: " . getData($data, "book")[0] . " Book Author: " . getData($data, "book/Lord Of The Flies/author")[0];
 
 	?>
 
+You'll notice that getData() returns an array. This is used if more than one data entry is found under one category, like in the example below:
+
+	Page/Title/Book Information
+	Page/Description/A list of some books and their authors
+	book/title/Lord Of The Flies/author/William Golding
+	book/title/Around The World In 80 Days/author/Jules Verne
+	book/title/Robinson Crusoe/author/Daniel Defoe
+
+There are three data entries under the category `book/title`. This can be useful. The example below uses this functionality to create a table displaying book names and their respective authors:
+
+	<?php
+	include_once 'data-parse.php';
+
+
+
+	$data = "Page/Title/Book Information" . "\nPage/Description/A list of some books and their authors" . "\nbook/title/Lord Of The Flies/author/William Golding" . "\nbook/title/Around The World In 80 Days/author/Jules Verne" . "\nbook/title/Robinson Crusoe/author/Daniel Defoe";
+
+	$bookTitleArray = getData($data, "book/title");
+
+	echo "<h1>" . getData($data, "Page/Title")[0] . "</h1>";
+	echo "<p><b>" . getData($data, "Page/Description")[0] . "</b></p>";
+
+	echo "<table border='1'>";
+	echo "\n<tr><td>Book Title</td><td>Book Author</td></tr>";
+	foreach($bookTitleArray as $title)
+	{
+		echo "\n<tr>\n";
+		echo "<td>" . $title . "</td><td>" . getData($data, "book/title/" . $title . "/author")[0] . "</td>";
+		echo "\n</tr>";
+	}
+
+	echo "</table>";
+
+	echo "<p>This page generated from the following data:</p>";
+	echo "<pre>" . $data . "</pre>";
+
+	?>
+
+Which will produce the following HTML page:
+
+![Resulting HTML Page](http://i.imgur.com/JQq3AMV.png?1)
+	
 I have also successfully used this parser using data retrieved from a cURL request, and a file.
 
-The parser is limited in the fact that it is only designed to parse data that has only unique categories (i.e. no two data entries in the same piece of data containing book/ or book/Lord Of The Flies/author, but /book/Lord Of The Flies/Summary/blah blah blah is ok). I hope to have that fixed soon!
+
