@@ -20,6 +20,15 @@ If we want to get the title of the book, we want to get the data under the `book
 
 But if we want to get the author of the book, `Lord Of The Flies` just turns into another category, as to get the author of the book, we want to get it under the category `book/Lord Of The Flies/author`
 
+Each line of data is known as a data entry. For example, there are 6 data entries in the following:
+
+	Page/Title/Server Query Info
+	OmniCraft/Api/ServerQuery/NumPlayers/1
+	OmniCraft/Api/ServerQuery/MaxPlayers/20
+	OmniCraft/Api/ServerQuery/Version/1.7.2
+	OmniCraft/Api/ServerQuery/NumPlayers/1
+	OmniCraft/Api/Request/Status/Success
+
 Parsing It
 ==========
 
