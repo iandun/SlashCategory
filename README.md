@@ -1,12 +1,12 @@
-SlashCategory
-=============
+What Is SlashCategory?
+======================
 
-A Categorical Data Format
+SlashCategory is a simple, no frills, human readable file format that is based on data organized into categories, with each piece of data and each category separated by a foward slash (hence the same SlashCategory).
 
-About
-=====
+Technical Details
+=================
 
-SlashCategory is a simple, no frills, but powerful data format that is organized by the following:
+SlashCategory is organized like the following:
 
 `category/data/category/data`
 
@@ -32,7 +32,15 @@ Each line of data is known as a data entry. For example, there are 6 data entrie
 Parsing It
 ==========
 
-The format is a relatively simple one. I have built a no-frills PHP parser (because I originally started using this format with web applications). It's pretty easy to use.
+The format is a relatively simple one. I have built a no-frills PHP parser (because I originally started using this format with web applications). It's pretty easy to use. Just use the getData function:
+
+`function getData($data, $pattern);`
+
+Where:
+
+`$data` is the data you want to parse.
+`$pattern` is the category the data you want to retrieve is under.
+
 
 Here's an example:
 
@@ -89,5 +97,16 @@ Which will produce the following HTML page:
 ![Resulting HTML Page](http://i.imgur.com/JQq3AMV.png?1)
 	
 I have also successfully used this parser using data retrieved from a cURL request, and a file.
+
+Common Mistakes
+===============
+
+`/book/title/Around The World In 80 Days/author/Jules Verne`
+No Slashes At The Beginning Of A Data Entry
+
+`getData($data, "book/title/")`
+Never put an ending slash at the end of `$pattern`.
+
+
 
 
