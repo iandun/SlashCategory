@@ -46,4 +46,6 @@ Here's an example:
 
 	?>
 
+I have also successfully used this parser using data retrieved from a cURL request, and a file.
+
 The parser is limited in the fact that it is only designed to parse data that has only unique categories (i.e. no two data entries in the same piece of data containing book/ or book/Lord Of The Flies/author, but /book/Lord Of The Flies/Summary/blah blah blah is ok). I hope to have that fixed soon!
