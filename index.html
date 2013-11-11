@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>SlashCategory by iandun</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>SlashCategory</h1>
+        <h2>A Categorical Data Format</h2>
+        <a href="https://github.com/iandun/SlashCategory" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a name="what-is-slashcategory" class="anchor" href="#what-is-slashcategory"><span class="octicon octicon-link"></span></a>What Is SlashCategory?</h1>
+
+<p>SlashCategory is a simple, no frills, human readable file format that is based on data organized into categories, with each piece of data and each category separated by a foward slash (hence the same SlashCategory).</p>
+
+<h1>
+<a name="technical-details" class="anchor" href="#technical-details"><span class="octicon octicon-link"></span></a>Technical Details</h1>
+
+<p>SlashCategory is organized like the following:</p>
+
+<p><code>category/data/category/data</code></p>
+
+<p>Although, in reality, there is no distinction between categories and data.</p>
+
+<p>For example, take the example:</p>
+
+<p><code>book/Lord Of The Flies/author/William Golding</code></p>
+
+<p>If we want to get the title of the book, we want to get the data under the <code>book</code> category, which would return the data <code>Lord Of The Flies</code>.</p>
+
+<p>But if we want to get the author of the book, <code>Lord Of The Flies</code> just turns into another category, as to get the author of the book, we want to get it under the category <code>book/Lord Of The Flies/author</code></p>
+
+<p>Each line of data is known as a data entry. For example, there are 6 data entries in the following:</p>
+
+<pre><code>Page/Title/Server Query Info
+OmniCraft/Api/ServerQuery/NumPlayers/1
+OmniCraft/Api/ServerQuery/MaxPlayers/20
+OmniCraft/Api/ServerQuery/Version/1.7.2
+OmniCraft/Api/ServerQuery/NumPlayers/1
+OmniCraft/Api/Request/Status/Success
+</code></pre>
+
+<h1>
+<a name="parsing-it" class="anchor" href="#parsing-it"><span class="octicon octicon-link"></span></a>Parsing It</h1>
+
+<p>The format is a relatively simple one. I have built a no-frills PHP parser (because I originally started using this format with web applications). It's pretty easy to use. Just use the getData function:</p>
+
+<p><code>function getData($data, $pattern);</code></p>
+
+<p>Where:</p>
+
+<p><code>$data</code> is the data you want to parse.</p>
+
+<p><code>$pattern</code> is the category the data you want to retrieve is under.</p>
+
+<p>Here's an example:</p>
+
+<pre><code>&lt;?php
+
+include_once 'SlashCategoryParse.php';
+
+$data = "book/Lord Of The Flies/author/William Golding";
+
+echo "Book Title: " . getData($data, "book")[0] . " Book Author: " . getData($data, "book/Lord Of The Flies/author")[0];
+
+?&gt;
+</code></pre>
+
+<p>You'll notice that getData() returns an array. This is used if more than one data entry is found under one category, like in the example below:</p>
+
+<pre><code>Page/Title/Book Information
+Page/Description/A list of some books and their authors
+book/title/Lord Of The Flies/author/William Golding
+book/title/Around The World In 80 Days/author/Jules Verne
+book/title/Robinson Crusoe/author/Daniel Defoe
+</code></pre>
+
+<p>There are three data entries under the category <code>book/title</code>. This can be useful. The example below uses this functionality to create a table displaying book names and their respective authors:</p>
+
+<pre><code>&lt;?php
+include_once 'data-parse.php';
+
+
+
+$data = "Page/Title/Book Information" . "\nPage/Description/A list of some books and their authors" . "\nbook/title/Lord Of The Flies/author/William Golding" . "\nbook/title/Around The World In 80 Days/author/Jules Verne" . "\nbook/title/Robinson Crusoe/author/Daniel Defoe";
+
+$bookTitleArray = getData($data, "book/title");
+
+echo "&lt;h1&gt;" . getData($data, "Page/Title")[0] . "&lt;/h1&gt;";
+echo "&lt;p&gt;&lt;b&gt;" . getData($data, "Page/Description")[0] . "&lt;/b&gt;&lt;/p&gt;";
+
+echo "&lt;table border='1'&gt;";
+echo "\n&lt;tr&gt;&lt;td&gt;Book Title&lt;/td&gt;&lt;td&gt;Book Author&lt;/td&gt;&lt;/tr&gt;";
+foreach($bookTitleArray as $title)
+{
+    echo "\n&lt;tr&gt;\n";
+    echo "&lt;td&gt;" . $title . "&lt;/td&gt;&lt;td&gt;" . getData($data, "book/title/" . $title . "/author")[0] . "&lt;/td&gt;";
+    echo "\n&lt;/tr&gt;";
+}
+
+echo "&lt;/table&gt;";
+
+echo "&lt;p&gt;This page generated from the following data:&lt;/p&gt;";
+echo "&lt;pre&gt;" . $data . "&lt;/pre&gt;";
+
+?&gt;
+</code></pre>
+
+<p>Which will produce the following HTML page:</p>
+
+<p><img src="http://i.imgur.com/JQq3AMV.png?1" alt="Resulting HTML Page"></p>
+
+<p>I have also successfully used this parser using data retrieved from a cURL request, and a file.</p>
+
+<h1>
+<a name="common-mistakes" class="anchor" href="#common-mistakes"><span class="octicon octicon-link"></span></a>Common Mistakes</h1>
+
+<p><code>/book/title/Around The World In 80 Days/author/Jules Verne</code>
+No Slashes At The Beginning Of A Data Entry</p>
+
+<p><code>getData($data, "book/title/")</code>
+Never put an ending slash at the end of <code>$pattern</code>.</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/iandun/SlashCategory/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/iandun/SlashCategory/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/iandun/SlashCategory"></a> is maintained by <a href="https://github.com/iandun">iandun</a>.</p>
+
+          <p>This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
