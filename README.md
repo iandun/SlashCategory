@@ -102,9 +102,11 @@ Common Mistakes
 ===============
 
 `/book/title/Around The World In 80 Days/author/Jules Verne`
+
 No Slashes At The Beginning Of A Data Entry
 
 `getData($data, "book/title/")`
+
 Never put an ending slash at the end of `$pattern`.
 
 
