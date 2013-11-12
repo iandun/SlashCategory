@@ -28,6 +28,12 @@ Each line of data is known as a data entry. For example, there are 6 data entrie
 	OmniCraft/Api/ServerQuery/Version/1.7.2
 	OmniCraft/Api/ServerQuery/NumPlayers/1
 	OmniCraft/Api/Request/Status/Success
+	
+There are also comments, which are ignored by the parser:
+
+	/data/more data/even more data
+	# This is a comment
+	# Comments always start with a # and do not span multiple lines
 
 Parsing It
 ==========
@@ -108,6 +114,11 @@ No Slashes At The Beginning Of A Data Entry
 `getData($data, "book/title/")`
 
 Never put an ending slash at the end of `$pattern`.
+
+Learn More About SlashCategory
+==============================
+
+Read [FileFormatInfo.md](FileFormatInfo.md "FileFormatInfo.md") for more information about the file format. This is a must-read if you are interested in using SlashCategory.
 
 
 
