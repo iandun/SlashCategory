@@ -20,16 +20,25 @@
 function getData($data, $pattern)
 {
 	
-	$foundData = false;
-	$dataArray = array();	
+	$foundData = false; //Were data entries retrieved from the file
+	$dataArray = array(); //Array of results
 	$dataArrayIteration = 0;
 	
 
-	$dataLineArray = explode("\n", $data);
+	$dataLineArray = explode("\n", $data); //Get each data entry
 
+	//Parse each data entry, look for data
 	foreach($dataLineArray as &$line)
 	{
-		if (strpos($line,$pattern) !== false) {
+		
+		if(substr( $line, 0, 1 ) === "#") //Is the line a comment
+		{
+			//Comment. Don't Do Anything;
+			;
+		}
+		else
+		{
+		if (strpos($line,$pattern) !== false) { //It's not a comment. Try to parse it.
     			
 			$lineArray = explode("/", $line);
 			$patternArray = explode("/", $pattern);
@@ -63,9 +72,10 @@ function getData($data, $pattern)
 			
 
 		}
+		}
 	}
 
-	return $dataArray;
+	return $dataArray; 
 }
 		
 	
