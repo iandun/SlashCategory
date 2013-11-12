@@ -4,6 +4,7 @@
 Page/Title/An Example Of SlashCategory
 Page/Description/A simple test for any SlashCategory Parser. Try to retrieve information from each data entry.
 Page/Author/iandun
+Page/Type/iandun.book.list.updated-format
 Book/Title/Lord Of The Flies/Author/William Golding/Published/1954
 Book/Title/Around The World In 80 Days/Author/Jules Verne/Published/1873
 Book/Title/The Mysterious Island/Author/Jules Verne/Published/1874
