@@ -40,13 +40,13 @@ function getData($data, $pattern)
 		{
 		if (strpos($line,$pattern) !== false) { //It's not a comment. Try to parse it.
     			
-			$lineArray = explode("/", $line);
+			$lineArray = explode("/", $line); 
 			$patternArray = explode("/", $pattern);
 
 			$iteration = 0;
 			
 
-			$foundData = true;
+			$foundData = true; //Data was found
 	
 			
 
@@ -58,7 +58,7 @@ function getData($data, $pattern)
 				}
 			elseif ($iteration == count($patternArray))
 			{
-				$dataArray[$dataArrayIteration] = $lineData;
+				$dataArray[$dataArrayIteration] = $lineData; //Found result. Add it to the array of results.
 				$dataArrayIteration++;
 			
 				break;
