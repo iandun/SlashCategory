@@ -17,6 +17,7 @@
    limitations under the License.
 */
 
+//Extract info from SlashCategory Data
 function getData($data, $pattern)
 {
 	
@@ -76,6 +77,49 @@ function getData($data, $pattern)
 	}
 
 	return $dataArray; 
+}
+
+//Allows you to get Data title (found in Page/Title)
+function getDataTitle($data)
+{
+		return getData($data, "Page/Title")[0];
+}
+
+//Allows you to get Data description (found in Page/Description)
+function getDataDescription($data)
+{
+	return getData($data, "Page/Description")[0];
+}
+
+//Allows you to get the Data author (found in Page/Author)
+function getDataAuthor($data)
+{
+	return getData($data, "Page/Author")[0];
+}
+
+//Allows you to get the Data type (found in Page/Type)
+function getDataType($data)
+{
+	return getDat($data, "Page/Type")[0];
+}
+
+//Allows you to see if reqeust failed or succeeded, and why
+function getRequestInfo($data)
+{
+	//Array data:
+	// request -> either 'success' or 'failed'
+	// reason -> why request succeeded or failed 
+	$requestArray = array(
+				"request" => "",
+				"reason" => ""
+				);
+	
+	$requestArray['request'] = getData($data, "Page/Request/Status")[0];
+	$requestArray['reason'] = getData($data, "Page/Request/Status/" . $requestArray['request'])[0];
+	
+	return $requestArray;
+	
+	
 }
 		
 	
