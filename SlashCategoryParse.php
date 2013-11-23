@@ -2,6 +2,7 @@
 
 /*
  SlashCategory PHP Parser
+ PHPSlashCategory
  Copyright 2013 Ian Duncan
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,8 +42,24 @@ function getData($data, $pattern)
 		{
 		if (strpos($line,$pattern) !== false) { //It's not a comment. Try to parse it.
     			
-			$lineArray = explode("/", $line); 
-			$patternArray = explode("/", $pattern);
+			//$lineArray = explode("/", $line);
+			//$lineArray = preg_split("((?<!\\\)/)", $line);
+			$lineArray = preg_split('|(?<!\\\)/|', $line);
+			array_walk(
+    				$lineArray,
+   				 function(&$item){
+        			return $item = str_replace('\\/', '/', $item);
+    				}
+			);
+			//$patternArray = explode("/", $pattern);
+			//$patternArray = preg_split("((?<!\\\)/)", $pattern);
+			$patternArray = preg_split('|(?<!\\\)/|', $pattern);
+			array_walk(
+    				$patternArray,
+   				 function(&$item){
+        			return $item = str_replace('\\/', '/', $item);
+    				}
+			);
 
 			$iteration = 0;
 			
@@ -82,44 +99,51 @@ function getData($data, $pattern)
 //Allows you to get Data title (found in Page/Title)
 function getDataTitle($data)
 {
-		return getData($data, "Page/Title")[0];
+		$dataTitle = getData($data, "Page/Title");
+		return $dataTitle[0];
 }
 
 //Allows you to get Data description (found in Page/Description)
 function getDataDescription($data)
 {
-	return getData($data, "Page/Description")[0];
+	$dataDesc = getData($data, "Page/Description");
+	return $dataDesc[0];
 }
 
 //Allows you to get the Data author (found in Page/Author)
 function getDataAuthor($data)
 {
-	return getData($data, "Page/Author")[0];
+	$dataAuthor = getData($data, "Page/Author");
+	return $dataAuthor[0];
 }
 
 //Allows you to get the Data type (found in Page/Type)
 function getDataType($data)
 {
-	return getDat($data, "Page/Type")[0];
+	$dataType = getData($data, "Page/Type");
+	return $dataType[0];
 }
 
 //Allows you to see if reqeust failed or succeeded, and why
 function getRequestInfo($data)
 {
 	//Array data:
-	// request -> either 'success' or 'failed'
+	// request -> either 'succeeded' or 'failed'
 	// reason -> why request succeeded or failed 
 	$requestArray = array(
 				"request" => "",
 				"reason" => ""
 				);
-	
-	$requestArray['request'] = getData($data, "Page/Request/Status")[0];
-	$requestArray['reason'] = getData($data, "Page/Request/Status/" . $requestArray['request'])[0];
+	$requestRequestArray = getData($data, "Page/Request/Status");
+	$reasonRequestArray = getData($data, "Page/Request/Status/" . $reasonRequestArray[0]);
+	$requestArray['request'] = $requestRequestArray[0];
+	$requestArray['reason'] = $reasonRequestArray[0];
 	
 	return $requestArray;
 	
 	
 }
+
+
 		
 	
